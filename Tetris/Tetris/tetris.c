@@ -1,46 +1,47 @@
 #include<stdio.h>
+#include<stdlib.h>
 #include<time.h>
 #include<windows.h>
 #include<conio.h>
+#include"block.h"
+#include"check.h"
+#include"render.h"
 
-void gotoxy(int x, int y);
+
 void hidecursor();
-void printblock(int(*arr)[4][4][4], int a, int block, int x, int y);
-void getkey(int* x, int* y);
 
-int arr[7][4][4][4];
-int phase = 0;
 
 int main(void) {
+	//Init
 	system("chcp 437");
-	clock_t CurTime, OldTime;
-	int block = 1;
-	int x = 10, y = 0;
 	hidecursor();
-
+	clock_t CurTime, OldTime;
+	Block block;
+	block = createblock();
 
 	while (1) {
+		//Init in while
 		OldTime = clock();
 		system("cls");
+
 		//Render
-		getkey(&x, &y);
-		printblock(arr, phase, block, x, y);
-		y++;
+		addblock(block);
+		rendermap();
+		removeblock(block);
+		if (checkcollisiondownward(block) == 1) {
+			block = createblock();
+		}
+		block.y++;
+
 
 		//Frame setting
 		while (1) {
 			CurTime = clock();
 			if (CurTime - OldTime > 660) { break; }
 		}
-
 	}
 }
 
-
-void gotoxy(int x, int y) {
-	COORD CursorPosition = { x,y };
-	SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), CursorPosition);
-}
 void hidecursor() {
 	HANDLE consoleHandle = GetStdHandle(STD_OUTPUT_HANDLE);
 	CONSOLE_CURSOR_INFO info;
@@ -48,30 +49,42 @@ void hidecursor() {
 	info.bVisible = FALSE;
 	SetConsoleCursorInfo(consoleHandle, &info);
 }
-void printblock(int(*arr)[4][4][4], int phase, int block, int x, int y) {
-
-	for (int i = 0; i < 4; i++) {
-		gotoxy(x, y);
-		for (int j = 0; j < 4; j++) {
-			if (arr[block][phase%4][i][j] == 1) { printf("%c", 254); }
-			else { printf("  "); }
-		}
-		y++;
-	}
-}
-void getkey(int *x, int *y) {
+void getkey(Block block) {
 	if (_kbhit()) {
 		if (_getch() == 0xE0) {
 			switch (_getch()) {
-			case 72: phase++; break;
-			case 75: (*x)--; break;
-			case 77: (*x)++; break;
+			case 72: block.phase++; break;
+			case 75: block.x--; break;
+			case 77: block.x++; break;
 			}
 		}
 	}
 }
 
-int arr[7][4][4][4] = {
+int map[20][14] = {
+	1,0,0,0,0,0,0,0,0,0,0,0,0,1,
+	1,0,0,0,0,0,0,0,0,0,0,0,0,1,
+	1,0,0,0,0,0,0,0,0,0,0,0,0,1,
+	1,0,0,0,0,0,0,0,0,0,0,0,0,1,
+	1,0,0,0,0,0,0,0,0,0,0,0,0,1,
+	1,0,0,0,0,0,0,0,0,0,0,0,0,1,
+	1,0,0,0,0,0,0,0,0,0,0,0,0,1,
+	1,0,0,0,0,0,0,0,0,0,0,0,0,1,
+	1,0,0,0,0,0,0,0,0,0,0,0,0,1,
+	1,0,0,0,0,0,0,0,0,0,0,0,0,1,
+	1,0,0,0,0,0,0,0,0,0,0,0,0,1,
+	1,0,0,0,0,0,0,0,0,0,0,0,0,1,
+	1,0,0,0,0,0,0,0,0,0,0,0,0,1,
+	1,0,0,0,0,0,0,0,0,0,0,0,0,1,
+	1,0,0,0,0,0,0,0,0,0,0,0,0,1,
+	1,0,0,0,0,0,0,0,0,0,0,0,0,1,
+	1,0,0,0,0,0,0,0,0,0,0,0,0,1,
+	1,0,0,0,0,0,0,0,0,0,0,0,0,1,
+	1,0,0,0,0,0,0,0,0,0,0,0,0,1,
+	1,1,1,1,1,1,1,1,1,1,1,1,1,1
+};
+
+int blockset[7][4][4][4] = {
 
 		0,0,0,0,
 		1,1,1,1,
