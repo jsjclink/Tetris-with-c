@@ -7,6 +7,7 @@
 
 //Global Variables Declaration
 int map[20][14];
+int templines[19][12];
 int blockset[7][4][4][4];
 int testblock[4][4];
 int block_x[4];
@@ -20,6 +21,7 @@ int blocktype = 0;
 int blockphase = 0;
 int originalpoint_x = 0;
 int originalpoint_y = 0;
+int clearlineposition[5];
 
 //Functions Declararion
 void Gotoxy(int x, int y);
@@ -40,8 +42,10 @@ int CheckBlockCollisionRight();
 void ChooseRandomBlock();
 void RotateBlock();
 int CheckBlockCollisionRotate();
-
-
+void CheckLineClear();
+void LineClear();
+void RemoveLine(int lineidx);
+void MoveLinesDownward(int lineidx);
 
 void GamePlay() {
 	//Initialize
@@ -70,6 +74,9 @@ void GamePlay() {
 		else {
 			RemoveBlock();
 			AddBlocktoMap();
+			CheckLineClear();
+			LineClear();
+			system("cls");
 			stage++;
 			CreateBlock();
 		}
@@ -329,6 +336,53 @@ int CheckBlockCollisionRotate() {
 	blockphase += 3;
 	blockphase = blockphase % 4;
 	return 0;
+}
+
+void CheckLineClear() {
+	//init
+	int blockcount;
+	int k;
+	memset(clearlineposition, -1, sizeof(clearlineposition));
+
+	//check from the bottom to top
+	for (int i = 18; i >= 0; i--) {
+		blockcount = 0;
+		for (int j = 1; j < 13; j++) {
+			if (map[i][j] == 1) { blockcount++; }
+		}
+		if (blockcount == 12) { //if all line is full of block, add line position(index) to clearlineposition[]
+			k = 0;
+			while (clearlineposition[k] != -1) {
+				k++;
+			}
+			clearlineposition[k] = i;
+		}
+	}
+}
+
+void LineClear() {
+	for (int i = 0; i < 5; i++) {
+		if (clearlineposition[i] == -1) { return; }
+		RemoveLine(clearlineposition[i]);
+		MoveLinesDownward(clearlineposition[i]);
+	}
+}
+
+void RemoveLine(int lineidx) {
+	for (int i = 1; i < 13; i++) {
+		map[lineidx][i] = 0;
+	}
+}
+
+void MoveLinesDownward(int lineidx) {
+	for (int i = lineidx - 1; i >= 0; i--) {
+		for (int j = 1; j < 13; j++) {
+			if (map[i][j] == 1) {
+				map[i][j] = 0;
+				map[i + 1][j] = 1;
+			}
+		}
+	}
 }
 
 
