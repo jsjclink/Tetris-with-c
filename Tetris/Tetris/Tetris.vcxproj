@@ -19,12 +19,8 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="tetris.c" />
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="block.h" />
-    <ClInclude Include="check.h" />
-    <ClInclude Include="render.h" />
+    <ClCompile Include="gameplay.c" />
+    <ClCompile Include="main.c" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>
