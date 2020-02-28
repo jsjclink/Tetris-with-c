@@ -11,9 +11,15 @@ int blockset[7][4][4][4];
 int testblock[4][4];
 int block_x[4];
 int block_y[4];
+int tempblock_x[4];
+int tempblock_y[4];
 int turncount = 0;
 int stage = 0;
 int iswaiting = 1;
+int blocktype = 0;
+int blockphase = 0;
+int originalpoint_x = 0;
+int originalpoint_y = 0;
 
 //Functions Declararion
 void Gotoxy(int x, int y);
@@ -31,6 +37,9 @@ void BlockMoveLeft();
 void BlockMoveRight();
 int CheckBlockCollisionLeft();
 int CheckBlockCollisionRight();
+void ChooseRandomBlock();
+void RotateBlock();
+int CheckBlockCollisionRotate();
 
 
 
@@ -110,6 +119,7 @@ void PrintStatus() {
 
 void CreateBlock() {
 	//initialization
+	ChooseRandomBlock();
 	int startplace_x = 5, startplace_y = 0;
 	int startpoint_x = 0, startpoint_y = 0;
 	int endpoint_x = 3, endpoint_y = 3;
@@ -158,6 +168,10 @@ void CreateBlock() {
 			}
 		}
 	}
+	
+	//calculate originalpoint
+	originalpoint_x = block_x[0] - startpoint_x;
+	originalpoint_y = block_y[0] - startpoint_y;
 }
 
 void PrintBlock() {
@@ -173,6 +187,7 @@ void BlockMoveDown() {
 		printf("%c", 0);
 		block_y[i]++;
 	}
+	originalpoint_y++;
 }
 
 int CheckBlockCollisionDown() {
@@ -214,6 +229,11 @@ void GetKbInput() {
 		break;
 	}
 	case 'c': {
+		if (CheckBlockCollisionRotate()) { break; }
+		RemoveBlock();
+		blockphase++;
+		blockphase = blockphase % 4;
+		RotateBlock();
 		break;
 	}
 	}
@@ -225,6 +245,7 @@ void BlockMoveLeft() {
 		printf("%c", 0);
 		block_x[i]--;
 	}
+	originalpoint_x--;
 }
 
 void BlockMoveRight() {
@@ -233,6 +254,7 @@ void BlockMoveRight() {
 		printf("%c", 0);
 		block_x[i]++;
 	}
+	originalpoint_x++;
 }
 
 int CheckBlockCollisionLeft() {
@@ -251,6 +273,66 @@ int CheckBlockCollisionRight() {
 	}
 	return 0;
 }
+
+void ChooseRandomBlock() {
+	srand(time(NULL));
+	blocktype = rand()%7;
+	blockphase = rand()%4;
+	for (int i = 0; i < 4; i++) {
+		for (int j = 0; j < 4; j++) {
+			testblock[i][j] = blockset[blocktype][blockphase][i][j];
+		}
+	}
+}
+void RotateBlock() {
+	int count = 0;
+	for (int i = 0; i < 4; i++) {
+		for (int j = 0; j < 4; j++) {
+			if (blockset[blocktype][blockphase][i][j] == 1) {
+				block_x[count] = j + originalpoint_x;
+				block_y[count] = i + originalpoint_y;
+				count++;
+			}
+		}
+	}
+
+
+}
+
+int CheckBlockCollisionRotate() {
+	//init
+	int count = 0;
+	//한번 돌린 후를 확인하기 위해 blockphase++
+	blockphase++;
+	blockphase = blockphase % 4;
+
+	for (int i = 0; i < 4; i++) { //한칸 돌린 상태를 tempblock_x, tempblock_y에 저장
+		for (int j = 0; j < 4; j++) {
+			if (blockset[blocktype][blockphase][i][j] == 1) {
+				tempblock_x[count] = j + originalpoint_x;
+				tempblock_y[count] = i + originalpoint_y;
+				count++;
+			}
+		}
+	}
+
+	for (int i = 0; i < 4; i++) { //temp_x, temp_y중에서 map에 충돌하는 것이 있는지 확인
+		if (map[tempblock_y[i]][tempblock_x[i]] == 1) {
+			//blockphase-- 를 하기 위해 +3, %4를 해줌(0에서 --하면 -1이 될 수도 있기 때문에 덧셈만 함)
+			blockphase += 3 ;
+			blockphase = blockphase % 4;
+
+			return 1; 
+		}
+	}
+	//blockphase-- 를 하기 위해 +3, %4를 해줌(0에서 --하면 -1이 될 수도 있기 때문에 덧셈만 함)
+	blockphase += 3;
+	blockphase = blockphase % 4;
+	return 0;
+}
+
+
+
 
 
 //Arrays
