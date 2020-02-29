@@ -7,6 +7,7 @@
 
 //Global Variables Declaration
 int map[20][14];
+int copymap[20][14];
 
 int blockset[7][4][4][4];
 int block[4][4];
@@ -80,6 +81,7 @@ void GamePlay() {
 				BlockMoveDown();
 			}
 			else {
+				score++;
 				EraseBlock();
 				AddBlocktoMap();
 				CheckLineClear();
@@ -99,7 +101,7 @@ void GamePlay() {
 		//Wait
 		while (1) {
 			CurTime = clock();
-			if (CurTime - OldTime > 33) {
+			if (CurTime - OldTime > 100) {
 				OldTime = CurTime;
 				break;
 			}
@@ -136,7 +138,7 @@ void GetKeyInput() {
 
 /***************************************************************************/
 void Gotoxy(int x, int y) {
-	COORD CursorPosition = { x,y };
+	COORD CursorPosition = { 2*x, y};
 	SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), CursorPosition);
 }
 
@@ -145,7 +147,11 @@ void PrintMap() {
 		for (int j = 0; j < 14; j++) {
 			if (map[i][j] == 1) {
 				Gotoxy(j, i);
-				printf("#");
+				printf("бс");
+			}
+			else {
+				Gotoxy(j, i);
+				printf("  ");
 			}
 		}
 	}
@@ -154,7 +160,7 @@ void PrintMap() {
 void PrintBlock() {
 	for (int i = 0; i < 4; i++) {
 		Gotoxy(block_x[i], block_y[i]);
-		printf("@");
+		printf("бр");
 	}
 }
 
@@ -166,6 +172,7 @@ void EraseBlock() {
 }
 
 void PrintStatus() {
+	/*
 	Gotoxy(15, 0);
 	printf("score : %4d", score*100);
 	for (int i = 0; i < 4; i++) {
@@ -174,6 +181,9 @@ void PrintStatus() {
 		Gotoxy(15, 2 * i + 2);
 		printf("block_y[%d] : %3d", i, block_y[i]);
 	}
+	*/
+	Gotoxy(15, 0);
+	printf("# Score : %4d", score * 100);
 }
 
 /***************************************************************************/
@@ -386,6 +396,7 @@ void LineClear() {
 		if (clearlineposition[i] == -1) { return; }
 		RemoveLine(clearlineposition[i]);
 		MoveLinesDownward(clearlineposition[i]);
+		score += 900;
 	}
 }
 
@@ -431,6 +442,29 @@ int map[20][14] = {
 	1,0,0,0,0,0,0,0,0,0,0,0,0,1,
 	1,0,0,0,0,0,0,0,0,0,0,0,0,1,
 	1,1,1,1,1,1,1,1,1,1,1,1,1,1
+};
+
+int copymap[20][14] = {
+	2,2,2,2,2,2,2,2,2,2,2,2,2,2,
+	2,2,2,2,2,2,2,2,2,2,2,2,2,2,
+	2,2,2,2,2,2,2,2,2,2,2,2,2,2,
+	2,2,2,2,2,2,2,2,2,2,2,2,2,2,
+	2,2,2,2,2,2,2,2,2,2,2,2,2,2,
+	2,2,2,2,2,2,2,2,2,2,2,2,2,2,
+	2,2,2,2,2,2,2,2,2,2,2,2,2,2,
+	2,2,2,2,2,2,2,2,2,2,2,2,2,2,
+	2,2,2,2,2,2,2,2,2,2,2,2,2,2,
+	2,2,2,2,2,2,2,2,2,2,2,2,2,2,
+	2,2,2,2,2,2,2,2,2,2,2,2,2,2,
+	2,2,2,2,2,2,2,2,2,2,2,2,2,2,
+	2,2,2,2,2,2,2,2,2,2,2,2,2,2,
+	2,2,2,2,2,2,2,2,2,2,2,2,2,2,
+	2,2,2,2,2,2,2,2,2,2,2,2,2,2,
+	2,2,2,2,2,2,2,2,2,2,2,2,2,2,
+	2,2,2,2,2,2,2,2,2,2,2,2,2,2,
+	2,2,2,2,2,2,2,2,2,2,2,2,2,2,
+	2,2,2,2,2,2,2,2,2,2,2,2,2,2,
+	2,2,2,2,2,2,2,2,2,2,2,2,2,2
 };
 
 

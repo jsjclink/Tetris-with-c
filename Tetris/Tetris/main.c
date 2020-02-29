@@ -19,7 +19,6 @@ int main() {
 	HideCursor();
 	system("cls");
 	system("mode con cols=80 lines=30");
-	system("chcp 437");
 	while (1) {
 		StartScreen();
 		PressAnyKey();
