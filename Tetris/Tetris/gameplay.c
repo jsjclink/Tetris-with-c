@@ -35,8 +35,6 @@ void PrintBlock();
 void EraseBlock();//name change erase block
 void PrintStatus();
 
-
-
 void CreateBlock();
 void ChooseRandomBlock();
 void AddBlocktoMap();
@@ -311,7 +309,7 @@ void RotateBlock() {
 /***************************************************************************/
 int CheckBlockCollisionDown() {
 	for (int i = 0; i < 4; i++) {
-		if (map[block_y[i] + 1][block_x[i]] == 1) { //ÇÑÄ­ ¹Ø¿¡ ºí·° ÀÖ´ÂÁö È®ÀÎ
+		if (map[block_y[i] + 1][block_x[i]] == 1) { //í•œì¹¸ ë°‘ì— ë¸”ëŸ­ ìžˆëŠ”ì§€ í™•ì¸
 			return 1;
 		}
 	}
@@ -320,7 +318,7 @@ int CheckBlockCollisionDown() {
 
 int CheckBlockCollisionLeft() {
 	for (int i = 0; i < 4; i++) {
-		if (map[block_y[i]][block_x[i] - 1] == 1) { //ÇÑÄ­ ¿ÞÂÊ¿¡ ºí·° ÀÖ´ÂÁö È®ÀÎ
+		if (map[block_y[i]][block_x[i] - 1] == 1) { //í•œì¹¸ ì™¼ìª½ì— ë¸”ëŸ­ ìžˆëŠ”ì§€ í™•ì¸
 			return 1;
 		}
 	}
@@ -329,7 +327,7 @@ int CheckBlockCollisionLeft() {
 
 int CheckBlockCollisionRight() {
 	for (int i = 0; i < 4; i++) {
-		if (map[block_y[i]][block_x[i] + 1] == 1) { //ÇÑÄ­ ¿À¸¥ÂÊ¿¡ ºí·° ÀÖ´ÂÁö È®ÀÎ
+		if (map[block_y[i]][block_x[i] + 1] == 1) { //í•œì¹¸ ì˜¤ë¥¸ìª½ì— ë¸”ëŸ­ ìžˆëŠ”ì§€ í™•ì¸
 			return 1;
 		}
 	}
@@ -339,11 +337,11 @@ int CheckBlockCollisionRight() {
 int CheckBlockCollisionRotate() {
 	//init
 	int count = 0;
-	//ÇÑ¹ø µ¹¸° ÈÄ¸¦ È®ÀÎÇÏ±â À§ÇØ blockphase++
+	//í•œë²ˆ ëŒë¦° í›„ë¥¼ í™•ì¸í•˜ê¸° ìœ„í•´ blockphase++
 	blockphase++;
 	blockphase = blockphase % 4;
 
-	for (int i = 0; i < 4; i++) { //ÇÑÄ­ µ¹¸° »óÅÂ¸¦ tempblock_x, tempblock_y¿¡ ÀúÀå
+	for (int i = 0; i < 4; i++) { //í•œì¹¸ ëŒë¦° ìƒíƒœë¥¼ tempblock_x, tempblock_yì— ì €ìž¥
 		for (int j = 0; j < 4; j++) {
 			if (blockset[blocktype][blockphase][i][j] == 1) {
 				tempblock_x[count] = j + originalpoint_x;
@@ -353,16 +351,16 @@ int CheckBlockCollisionRotate() {
 		}
 	}
 
-	for (int i = 0; i < 4; i++) { //temp_x, temp_yÁß¿¡¼­ map¿¡ Ãæµ¹ÇÏ´Â °ÍÀÌ ÀÖ´ÂÁö È®ÀÎ
+	for (int i = 0; i < 4; i++) { //temp_x, temp_yì¤‘ì—ì„œ mapì— ì¶©ëŒí•˜ëŠ” ê²ƒì´ ìžˆëŠ”ì§€ í™•ì¸
 		if (map[tempblock_y[i]][tempblock_x[i]] == 1) {
-			//blockphase-- ¸¦ ÇÏ±â À§ÇØ +3, %4¸¦ ÇØÁÜ(0¿¡¼­ --ÇÏ¸é -1ÀÌ µÉ ¼öµµ ÀÖ±â ¶§¹®¿¡ µ¡¼À¸¸ ÇÔ)
+			//blockphase-- ë¥¼ í•˜ê¸° ìœ„í•´ +3, %4ë¥¼ í•´ì¤Œ(0ì—ì„œ --í•˜ë©´ -1ì´ ë  ìˆ˜ë„ ìžˆê¸° ë•Œë¬¸ì— ë§ì…ˆë§Œ í•¨)
 			blockphase += 3;
 			blockphase = blockphase % 4;
 
 			return 1;
 		}
 	}
-	//blockphase-- ¸¦ ÇÏ±â À§ÇØ +3, %4¸¦ ÇØÁÜ(0¿¡¼­ --ÇÏ¸é -1ÀÌ µÉ ¼öµµ ÀÖ±â ¶§¹®¿¡ µ¡¼À¸¸ ÇÔ)
+	//blockphase-- ë¥¼ í•˜ê¸° ìœ„í•´ +3, %4ë¥¼ í•´ì¤Œ(0ì—ì„œ --í•˜ë©´ -1ì´ ë  ìˆ˜ë„ ìžˆê¸° ë•Œë¬¸ì— ë§ì…ˆë§Œ í•¨)
 	blockphase += 3;
 	blockphase = blockphase % 4;
 	return 0;
