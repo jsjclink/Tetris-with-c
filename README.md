@@ -1,2 +1,2 @@
-# C_Tetris
+# Tetris with c
 testris c
