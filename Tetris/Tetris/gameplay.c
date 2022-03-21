@@ -145,7 +145,7 @@ void PrintMap() {
 		for (int j = 0; j < 14; j++) {
 			if (map[i][j] == 1) {
 				Gotoxy(j, i);
-				printf("��");
+				printf("#");
 			}
 			else {
 				Gotoxy(j, i);
@@ -158,7 +158,7 @@ void PrintMap() {
 void PrintBlock() {
 	for (int i = 0; i < 4; i++) {
 		Gotoxy(block_x[i], block_y[i]);
-		printf("��");
+		printf("@");
 	}
 }
 
@@ -309,7 +309,7 @@ void RotateBlock() {
 /***************************************************************************/
 int CheckBlockCollisionDown() {
 	for (int i = 0; i < 4; i++) {
-		if (map[block_y[i] + 1][block_x[i]] == 1) { //한칸 밑에 블럭 있는지 확인
+		if (map[block_y[i] + 1][block_x[i]] == 1) { //í•œì¹¸ ë°‘ì— ë¸”ëŸ­ ìžˆëŠ”ì§€ í™•ì¸
 			return 1;
 		}
 	}
@@ -318,7 +318,7 @@ int CheckBlockCollisionDown() {
 
 int CheckBlockCollisionLeft() {
 	for (int i = 0; i < 4; i++) {
-		if (map[block_y[i]][block_x[i] - 1] == 1) { //한칸 왼쪽에 블럭 있는지 확인
+		if (map[block_y[i]][block_x[i] - 1] == 1) { //í•œì¹¸ ì™¼ìª½ì— ë¸”ëŸ­ ìžˆëŠ”ì§€ í™•ì¸
 			return 1;
 		}
 	}
@@ -327,7 +327,7 @@ int CheckBlockCollisionLeft() {
 
 int CheckBlockCollisionRight() {
 	for (int i = 0; i < 4; i++) {
-		if (map[block_y[i]][block_x[i] + 1] == 1) { //한칸 오른쪽에 블럭 있는지 확인
+		if (map[block_y[i]][block_x[i] + 1] == 1) { //í•œì¹¸ ì˜¤ë¥¸ìª½ì— ë¸”ëŸ­ ìžˆëŠ”ì§€ í™•ì¸
 			return 1;
 		}
 	}
@@ -337,11 +337,11 @@ int CheckBlockCollisionRight() {
 int CheckBlockCollisionRotate() {
 	//init
 	int count = 0;
-	//한번 돌린 후를 확인하기 위해 blockphase++
+	//í•œë²ˆ ëŒë¦° í›„ë¥¼ í™•ì¸í•˜ê¸° ìœ„í•´ blockphase++
 	blockphase++;
 	blockphase = blockphase % 4;
 
-	for (int i = 0; i < 4; i++) { //한칸 돌린 상태를 tempblock_x, tempblock_y에 저장
+	for (int i = 0; i < 4; i++) { //í•œì¹¸ ëŒë¦° ìƒíƒœë¥¼ tempblock_x, tempblock_yì— ì €ìž¥
 		for (int j = 0; j < 4; j++) {
 			if (blockset[blocktype][blockphase][i][j] == 1) {
 				tempblock_x[count] = j + originalpoint_x;
@@ -351,16 +351,16 @@ int CheckBlockCollisionRotate() {
 		}
 	}
 
-	for (int i = 0; i < 4; i++) { //temp_x, temp_y중에서 map에 충돌하는 것이 있는지 확인
+	for (int i = 0; i < 4; i++) { //temp_x, temp_yì¤‘ì—ì„œ mapì— ì¶©ëŒí•˜ëŠ” ê²ƒì´ ìžˆëŠ”ì§€ í™•ì¸
 		if (map[tempblock_y[i]][tempblock_x[i]] == 1) {
-			//blockphase-- 를 하기 위해 +3, %4를 해줌(0에서 --하면 -1이 될 수도 있기 때문에 덧셈만 함)
+			//blockphase-- ë¥¼ í•˜ê¸° ìœ„í•´ +3, %4ë¥¼ í•´ì¤Œ(0ì—ì„œ --í•˜ë©´ -1ì´ ë  ìˆ˜ë„ ìžˆê¸° ë•Œë¬¸ì— ë§ì…ˆë§Œ í•¨)
 			blockphase += 3;
 			blockphase = blockphase % 4;
 
 			return 1;
 		}
 	}
-	//blockphase-- 를 하기 위해 +3, %4를 해줌(0에서 --하면 -1이 될 수도 있기 때문에 덧셈만 함)
+	//blockphase-- ë¥¼ í•˜ê¸° ìœ„í•´ +3, %4ë¥¼ í•´ì¤Œ(0ì—ì„œ --í•˜ë©´ -1ì´ ë  ìˆ˜ë„ ìžˆê¸° ë•Œë¬¸ì— ë§ì…ˆë§Œ í•¨)
 	blockphase += 3;
 	blockphase = blockphase % 4;
 	return 0;
